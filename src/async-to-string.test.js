@@ -1,5 +1,5 @@
 import { describe, test, expect, jest } from '@jest/globals';
-import { asyncToString, safeString } from './async-to-string.js';
+import { asyncToString, safeString, unsafeString } from './async-to-string.js';
 
 describe('async to string', () => {
   test('unsafe string', async () => {
@@ -12,6 +12,7 @@ describe('async to string', () => {
   test('safe string', async () => {
     const encode = jest.fn();
     encode.mockReturnValueOnce('bert');
+    expect(unsafeString(safeString('henk'))).toBe('henk');
     expect(await asyncToString(safeString('henk'), { encode })).toBe('henk');
     expect(encode).not.toBeCalled();
   });

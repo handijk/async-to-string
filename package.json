@@ -1,6 +1,6 @@
 {
   "name": "async-to-string",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Turn every (async or sync) value into a string",
   "main": "src/index.js",
   "type": "module",

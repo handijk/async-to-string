@@ -1,8 +1,8 @@
-import { asyncToString, safeString } from './async-to-string.js';
+import { asyncToString } from './async-to-string.js';
 
-export const TagAsyncToString =
-  ({ asyncToStringFn = asyncToString, ...rest } = {}) =>
-  async (strings, ...promises) =>
+export const tagAsyncToString =
+  (strings, ...promises) =>
+  async ({ asyncToStringFn = asyncToString, ...rest } = {}) =>
     (
       await Promise.all(
         promises.map((item) => asyncToStringFn(item, { ...rest }))
@@ -10,11 +10,3 @@ export const TagAsyncToString =
     )
       .reduce((acc, curr, i) => [...acc, curr, strings[i + 1]], [strings[0]])
       .join('');
-
-export const TagAsyncToSafeString = ({
-  safeStringFn = safeString,
-  ...rest
-} = {}) => {
-  const tagAsyncToString = TagAsyncToString({ ...rest });
-  return async (...args) => safeStringFn(await tagAsyncToString(...args));
-};

@@ -126,15 +126,15 @@ console.log(
 
 # Tag usage
 
-The factory method `TagAsyncToString` takes the options that `asyncToString` also uses as the only argument and returns the tag function.
+The tag function `tagAsyncToString` returns a method that can be called with the options argument of the `asyncToString` method.
 
 ```js
-import { TagAsyncToString } from 'async-to-string';
+import { tagAsyncToString } from 'async-to-string';
 
-const myTag = TagAsyncToString({ /* asyncToString options can be provided here */ });
+const template = tagAsyncToString`This is some string with an ${Promise.resolve('async replacement')}`;
 
 console.log(
-  await myTag`This is some string with an ${Promise.resolve('async replacement')}`
+  await template({ /* asyncToString options can be provided here */ })
 )
 ); // -> 'This is some string with an async replacement'
 ```
@@ -142,14 +142,17 @@ console.log(
 All values that `asyncToString` will convert to strings can be used as placeholders
 
 ```js
-import { TagAsyncToString } from 'async-to-string';
+import { tagAsyncToString } from 'async-to-string';
 
-const myTag = TagAsyncToString({ args: [6, 3] });
+const template = tagAsyncToString`This is some string with an ${Promise.resolve(
+  'async replacement'
+)}
+Just showing off: ${[
+  (x, y) => x + y,
+  Promise.resolve(['string', (x, y) => x - y]),
+]}`;
 
-console.log(
-  await myTag`This is some string with an ${Promise.resolve('async replacement')}
-Just showing off: ${[(x, y) => x + y, Promise.resolve(['string', (x, y) => x - y])]}`
-);
+console.log(await template({ args: [6, 3] }));
 // -> 'This is some string with an async replacement
 // -> 'Just showing off: 19string3'
 ```
